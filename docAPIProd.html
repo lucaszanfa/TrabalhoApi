@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação da APIProd</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+        }
+        .endpoint {
+            margin-bottom: 20px;
+        }
+        .method {
+            font-weight: bold;
+            color: #007BFF;
+        }
+        .path {
+            font-weight: bold;
+        }
+        .description {
+            margin-bottom: 10px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Documentação da API REST - Produtos</h1>
+
+    <div class="endpoint">
+        <h2>1. Listar Todos os Produtos</h2>
+        <p class="method">Método: GET</p>
+        <p class="path">Rota: <code>/produtos</code></p>
+        <p class="description">Retorna uma lista de todos os produtos cadastrados no banco de dados.</p>
+        <pre>
+Exemplo de resposta:
+[
+  {
+    "id": 1,
+    "nome": "Produto A",
+    "preco": 25.99
+  },
+  {
+    "id": 2,
+    "nome": "Produto B",
+    "preco": 35.50
+  }
+]
+        </pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>2. Listar um Produto Específico</h2>
+        <p class="method">Método: GET</p>
+        <p class="path">Rota: <code>/produtos/&lt;int:produto_id&gt;</code></p>
+        <p class="description">Retorna os dados de um produto específico pelo seu ID.</p>
+        <pre>
+Exemplo de resposta:
+{
+  "id": 1,
+  "nome": "Produto A",
+  "preco": 25.99
+}
+        </pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>3. Criar um Novo Produto</h2>
+        <p class="method">Método: POST</p>
+        <p class="path">Rota: <code>/produtos</code></p>
+        <p class="description">Cria um novo produto com base nos dados fornecidos no corpo da requisição.</p>
+        <pre>
+Exemplo de corpo da requisição (JSON):
+{
+  "nome": "Produto C",
+  "preco": 45.75
+}
+
+Exemplo de resposta:
+{
+  "id": 3,
+  "nome": "Produto C",
+  "preco": 45.75
+}
+        </pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>4. Atualizar um Produto</h2>
+        <p class="method">Método: PUT</p>
+        <p class="path">Rota: <code>/produtos/&lt;int:produto_id&gt;</code></p>
+        <p class="description">Atualiza os dados de um produto específico pelo seu ID.</p>
+        <pre>
+Exemplo de corpo da requisição (JSON):
+{
+  "nome": "Produto A Atualizado",
+  "preco": 30.00
+}
+
+Exemplo de resposta:
+{
+  "id": 1,
+  "nome": "Produto A Atualizado",
+  "preco": 30.00
+}
+        </pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>5. Deletar um Produto</h2>
+        <p class="method">Método: DELETE</p>
+        <p class="path">Rota: <code>/produtos/&lt;int:produto_id&gt;</code></p>
+        <p class="description">Remove um produto específico do banco de dados pelo seu ID.</p>
+        <pre>
+Exemplo de resposta:
+{
+  "mensagem": "Produto excluído com sucesso"
+}
+        </pre>
+    </div>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>CRUD de Produtos</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 60%; margin-bottom: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f4f4f4; }
+    input { margin: 5px 0; padding: 5px; width: 200px; }
+    button { padding: 5px 10px; margin: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<h1>CRUD de Produtos</h1>
+
+<h2>Adicionar / Atualizar Produto</h2>
+<input type="number" id="produtoId" placeholder="ID (para atualizar/excluir)">
+<br>
+<input type="text" id="nome" placeholder="Nome do produto">
+<br>
+<input type="number" id="preco" placeholder="Preço do produto" step="0.01">
+<br>
+<button onclick="adicionarProduto()">Adicionar Produto</button>
+<button onclick="atualizarProduto()">Atualizar Produto</button>
+<button onclick="excluirProduto()">Excluir Produto</button>
+
+<h2>Lista de Produtos</h2>
+<button onclick="listarProdutos()">Atualizar Lista</button>
+<table id="tabelaProdutos">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Preço</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Produtos vão aparecer aqui -->
+  </tbody>
+</table>
+
+<script>
+const API_URL = "http://127.0.0.1:5000/produtos";
+
+// Listar produtos
+async function listarProdutos() {
+  const res = await fetch(API_URL);
+  const produtos = await res.json();
+  const tbody = document.querySelector("#tabelaProdutos tbody");
+  tbody.innerHTML = "";
+  produtos.forEach(p => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${p.id}</td><td>${p.nome}</td><td>${p.preco}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// Adicionar produto
+async function adicionarProduto() {
+  const nome = document.getElementById("nome").value;
+  const preco = parseFloat(document.getElementById("preco").value);
+  if(!nome || isNaN(preco)) { alert("Preencha nome e preço"); return; }
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nome, preco })
+  });
+  const produto = await res.json();
+  alert(`Produto adicionado: ${produto.nome} (ID ${produto.id})`);
+  listarProdutos();
+}
+
+// Atualizar produto
+async function atualizarProduto() {
+  const id = parseInt(document.getElementById("produtoId").value);
+  const nome = document.getElementById("nome").value;
+  const preco = parseFloat(document.getElementById("preco").value);
+  if(isNaN(id) || !nome || isNaN(preco)) { alert("Preencha ID, nome e preço"); return; }
+
+  const res = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nome, preco })
+  });
+
+  if(res.ok){
+    const produto = await res.json();
+    alert(`Produto atualizado: ${produto.nome} (ID ${produto.id})`);
+    listarProdutos();
+  } else {
+    alert("Erro ao atualizar produto");
+  }
+}
+
+// Excluir produto
+async function excluirProduto() {
+  const id = parseInt(document.getElementById("produtoId").value);
+  if(isNaN(id)) { alert("Preencha o ID"); return; }
+
+  const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  if(res.ok){
+    alert(`Produto com ID ${id} excluído`);
+    listarProdutos();
+  } else {
+    alert("Erro ao excluir produto");
+  }
+}
+
+// Atualiza a lista ao carregar a página
+listarProdutos();
+</script>
+
+</body>
+</html>
